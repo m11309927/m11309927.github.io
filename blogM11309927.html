@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>永和人的灶咖：竹林路美食大地圖</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ff4d00',
+                        secondary: '#ffd700',
+                        accent: '#00f2ff',
+                        surface: '#0a0a0c',
+                        card: '#16161a',
+                        glow: 'rgba(255, 77, 0, 0.15)',
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                        display: ['Outfit', 'Noto Sans TC', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'scroll-reveal': 'scroll-reveal linear forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0c;
+            color: #e5e7eb;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .glass-panel {
+            background: rgba(22, 22, 26, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 15px rgba(255, 77, 0, 0.5);
+        }
+
+        .cyber-border {
+            position: relative;
+        }
+
+        .cyber-border::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #ff4d00;
+            box-shadow: 0 0 10px #ff4d00;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(180deg, rgba(10, 10, 12, 0) 0%, rgba(10, 10, 12, 1) 100%);
+        }
+
+        .section-tag {
+            font-family: 'Outfit', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 0.75rem;
+            color: #ff4d00;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        ::selection {
+            background: #ff4d00;
+            color: white;
+        }
+
+        /* 3A Game Feel Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff4d00;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Cinematic Hero Section -->
+    <header class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        <!-- Banner Background -->
+        <div class="absolute inset-0 z-0">
+            <img src='https://opal.google/board/blobs/1935a841-49c5-436a-81df-034601eb7bcf' alt='media_1' class="w-full h-full object-cover scale-105 animate-pulse-slow opacity-60" />
+            <div class="absolute inset-0 hero-gradient"></div>
+            <div class="absolute inset-0 bg-black/40"></div>
+        </div>
+
+        <!-- Floating UI Elements -->
+        <div class="absolute top-10 left-10 hidden lg:block opacity-30">
+            <div class="text-[10px] font-mono space-y-1">
+                <p>SYSTEM_STATUS: ONLINE</p>
+                <p>LOCATION: YONGHE_DISTRICT_234</p>
+                <p>COORDINATES: 25.0131° N, 121.5165° E</p>
+            </div>
+        </div>
+
+        <div class="relative z-10 text-center px-4 max-w-5xl">
+            <span class="inline-block px-3 py-1 mb-6 border border-primary/50 bg-primary/10 text-primary text-xs font-bold tracking-[0.3em] rounded-sm uppercase animate-bounce">
+                Culinary Exploration
+            </span>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black font-display mb-6 leading-tight tracking-tighter">
+                <span class="block text-white">永和人的</span>
+                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary animate-gradient-x text-glow">
+                    灶咖：竹林路
+                </span>
+            </h1>
+            <p class="text-lg md:text-2xl text-gray-300 font-light max-w-2xl mx-auto leading-relaxed border-l-2 border-primary/50 pl-6 italic">
+                不只雞肉飯，還有靈魂的味道。在時空交疊的街道，尋找最真實的煙火氣。
+            </p>
+            
+            <div class="mt-12 flex flex-col md:flex-row items-center justify-center gap-6">
+                <a href="#content" class="px-8 py-4 bg-primary text-black font-bold text-sm tracking-widest hover:bg-white transition-all duration-300 transform hover:scale-105 rounded-sm">
+                    START EXPLORING
+                </a>
+                <span class="text-xs font-mono text-gray-500">M11309927 // VER. 2.0</span>
+            </div>
+        </div>
+
+        <!-- Bottom Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center">
+            <div class="w-[1px] h-20 bg-gradient-to-b from-transparent via-primary to-transparent"></div>
+        </div>
+    </header>
+
+    <main id="content" class="relative z-10 max-w-7xl mx-auto px-6 py-24 space-y-32">
+        
+        <!-- Section 1: Introduction -->
+        <section class="grid lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-7 space-y-6">
+                <span class="section-tag">01 / The Essence</span>
+                <h2 class="text-4xl md:text-5xl font-bold font-display text-white cyber-border pb-4">竹林路是什麼樣的存在？</h2>
+                <div class="text-lg text-gray-400 leading-relaxed space-y-4">
+                    <p>
+                        行走在永和的街道上，往往有一種時空交疊的錯覺。如果說樂華夜市是那種穿著華麗禮服、迎接遠方來客的「門面」，那麼竹林路，無疑就是永和人最自在的「私房廚房」。這裡不販售觀光客的喧囂，卻濃縮了這座城市最真實的煙火氣與生活律動。
+                    </p>
+                    <p>
+                        對一個習慣在都市叢林中尋找規律的思考者來說，竹林路是一場關於「密度」的實踐。從頂溪捷運站踏出，轉進竹林路，你便進入了一個美食密度堪比便利商店的神奇區域。
+                    </p>
+                </div>
+            </div>
+            <div class="lg:col-span-5">
+                <div class="glass-panel p-8 rounded-2xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-20 text-4xl font-black italic">DENSITY</div>
+                    <p class="text-xl italic text-secondary leading-relaxed">
+                        「這裡有一種迷人的雜亂感。新舊並陳並非刻意經營，而是歷史進程中自然堆疊出的生活切片。」
+                    </p>
+                    <div class="mt-6 flex items-center gap-4">
+                        <div class="h-10 w-10 bg-primary/20 rounded-full border border-primary/50 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.5a6.5 6.5 0 110-13 6.5 6.5 0 010 13z"></path></svg>
+                        </div>
+                        <span class="text-sm font-mono uppercase tracking-tighter">Locals' Knowledge Hub</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Why it exists (Bento Grid Style) -->
+        <section class="space-y-12">
+            <div class="text-center space-y-4">
+                <span class="section-tag mx-auto">02 / Sociological Analysis</span>
+                <h2 class="text-4xl md:text-5xl font-bold font-display text-white">為什麼這裡這麼好餵飽？</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Large Card -->
+                <div class="md:col-span-2 glass-panel p-10 rounded-3xl border-l-4 border-l-primary">
+                    <h3 class="text-2xl font-bold mb-4 text-white">行政與教育的交織</h3>
+                    <p class="text-gray-400 leading-relaxed mb-6">
+                        鄰近的永和區公所、戶政事務所，帶動了龐大的公務體系進食需求；而永和國中、福和國中的萬千學子，則是這片土地上最忠誠的食客。這群「肚子餓的人們」形塑了這裡的飲食基因：必須快速、必須平價、而且必須是大份量的飽足。
+                    </p>
+                </div>
+                <!-- Small Card -->
+                <div class="glass-panel p-10 rounded-3xl bg-gradient-to-br from-card to-primary/5">
+                    <h3 class="text-2xl font-bold mb-4 text-white">麵粉浪漫</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        早期受榮民文化影響，發展出深厚的麵食底蘊。那些講究手勁的麵條、紮實的皮殼，成為了生活節奏飛快的永和人的共同語彙。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Kings (Dynamic Layout) -->
+        <section class="relative">
+            <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-transparent to-primary"></div>
+            
+            <div class="flex flex-col items-center mb-16 text-center">
+                <span class="section-tag">03 / The Power Map</span>
+                <h2 class="text-4xl md:text-6xl font-black font-display text-white">誰才是這條路的王者？</h2>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- King 1 -->
+                <div class="group relative bg-card rounded-2xl overflow-hidden border border-white/5 transition-all hover:border-primary/50">
+                    <div class="h-64 bg-neutral-900 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-primary/20 mix-blend-overlay"></div>
+                        <div class="z-10 text-center">
+                            <span class="text-primary text-xs font-mono">CODE NAME: CHICKEN_KING</span>
+                            <h3 class="text-4xl font-black text-white mt-2 tracking-widest">竹林雞肉</h3>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <p class="text-gray-300 leading-relaxed">
+                            它不僅僅是一碗雞肉飯，它更像是一種對「極致連結」的追求。那皮Ｑ肉嫩的質地，搭配上濃郁的特製淋醬，讓「銷魂」二字不再是浮誇的形容詞。
+                        </p>
+                        <div class="mt-6 flex items-center justify-between">
+                            <span class="text-secondary font-bold">流量密碼 #01</span>
+                            <button class="text-primary font-mono text-xs hover:underline uppercase tracking-widest">Read More ></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- King 2 -->
+                <div class="group relative bg-card rounded-2xl overflow-hidden border border-white/5 transition-all hover:border-secondary/50">
+                    <div class="h-64 bg-neutral-900 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-secondary/20 mix-blend-overlay"></div>
+                        <div class="z-10 text-center">
+                            <span class="text-secondary text-xs font-mono">CODE NAME: DUMPLING_LEGEND</span>
+                            <h3 class="text-4xl font-black text-white mt-2 tracking-widest">鍋貼傳奇</h3>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <p class="text-gray-300 leading-relaxed">
+                            如「佳威（原佳佳香）」。這種類型的店家支撐著在地人最穩定的幸福感來源——那種酥脆外皮與飽滿內餡的碰撞，是平凡生活中最紮實的支點。
+                        </p>
+                        <div class="mt-6 flex items-center justify-between">
+                            <span class="text-primary font-bold">流量密碼 #02</span>
+                            <button class="text-secondary font-mono text-xs hover:underline uppercase tracking-widest">Read More ></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Side Effects (Contrast Design) -->
+        <section class="bg-white/5 rounded-[3rem] p-12 lg:p-24 border border-white/10 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -z-10"></div>
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <span class="section-tag">04 / The Shadow</span>
+                    <h2 class="text-4xl font-bold font-display text-white mb-8">暴紅之後的副作用</h2>
+                    <p class="text-gray-400 text-lg leading-relaxed mb-8">
+                        作為一個理性的观察者，我們也必須直面繁榮背後的陰影。竹林路的物理空間極其有限，路幅狹窄加上密集的公車與機車，使得這裡在熱門時段簡直是一家「交通大混戰」。
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 text-sm font-mono text-gray-500">
+                            <div class="w-2 h-2 bg-primary animate-ping"></div>
+                            交通壓力指數：CRITICAL
+                        </div>
+                        <div class="flex items-center gap-4 text-sm font-mono text-gray-500">
+                            <div class="w-2 h-2 bg-secondary animate-ping"></div>
+                            等待時間成本：HIGH
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div class="glass-panel p-6 border-l-2 border-primary">
+                        <h4 class="font-bold text-white mb-2 italic">價值觀的碰撞</h4>
+                        <p class="text-sm text-gray-400">「現在吃的是名氣，不再是回憶了。」當一頓小吃需要耗費半小時以上，老店的傳統與現代的美學標準正產生激烈的成長痛。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Future (Clean, Tech-infused) -->
+        <section class="space-y-12">
+            <div class="max-w-3xl mx-auto text-center space-y-6">
+                <span class="section-tag">05 / Evolution</span>
+                <h2 class="text-4xl md:text-5xl font-bold font-display text-white">竹林路 2.0：未來長怎樣？</h2>
+                <p class="text-gray-400 text-xl leading-relaxed">
+                    儘管存在爭議，但我對於竹林路的未來持有一種「演化論」式的樂觀。
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glass-panel p-12 rounded-3xl hover:bg-white/5 transition-colors group">
+                    <div class="text-primary text-4xl mb-6 font-black opacity-30 group-hover:opacity-100 transition-opacity">01</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">二代轉型</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        老店不再只是埋頭苦幹，開始引進品牌思維，讓傳統小吃也能具備文青質感或數位化的體面。以後或許能透過手機預約，取代烈日下的苦等。
+                    </p>
+                </div>
+                <div class="glass-panel p-12 rounded-3xl hover:bg-white/5 transition-colors group">
+                    <div class="text-secondary text-4xl mb-6 font-black opacity-30 group-hover:opacity-100 transition-opacity">02</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">向內伸展</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        具有實驗精神的職人咖啡室、私廚餐廳正往巷弄深處潛入。這讓竹林路的探索變得更像一場「地下寻寶」，美食版圖也因此變得更加立體。
+                    </p>
+                </div>
+            </div>
+
+            <!-- Conclusion Quote -->
+            <div class="mt-24 pt-24 border-t border-white/10 text-center">
+                <p class="text-2xl md:text-4xl font-display font-light text-white leading-tight max-w-4xl mx-auto italic">
+                    「在這裡，我們吃的不僅是食物，更是這座城市的性格與未來。」
+                </p>
+                <div class="mt-12 flex justify-center gap-2">
+                    <div class="w-12 h-1 bg-primary"></div>
+                    <div class="w-4 h-1 bg-secondary"></div>
+                    <div class="w-1 h-1 bg-white"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Interactive Navigation Overlay (Sidebar Indicator) -->
+    <nav class="fixed right-8 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-8 items-center">
+        <div class="h-2 w-2 rounded-full bg-primary ring-4 ring-primary/20"></div>
+        <div class="h-1 w-1 rounded-full bg-gray-600"></div>
+        <div class="h-1 w-1 rounded-full bg-gray-600"></div>
+        <div class="h-1 w-1 rounded-full bg-gray-600"></div>
+        <div class="h-1 w-1 rounded-full bg-gray-600"></div>
+    </nav>
+
+    <!-- UI Background Elements -->
+    <div class="fixed inset-0 -z-50 pointer-events-none">
+        <div class="absolute top-1/4 -left-64 w-96 h-96 bg-primary/5 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-1/4 -right-64 w-96 h-96 bg-accent/5 blur-[120px] rounded-full"></div>
+    </div>
+
+    <script>
+        // Smooth reveal on scroll logic (Simplified for iframe)
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
+
+        // Hover audio effect simulation (Visual only for this task)
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                // Potential for haptic or audio feedback trigger here
+            });
+        });
+    </script>
+</body>
+</html>
