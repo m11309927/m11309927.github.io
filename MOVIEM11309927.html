@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 NBA 季後賽分析報告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nbaBlue: '#00471B', // Custom sophisticated dark green/blue
+                        thunder: '#007AC1',
+                        knicks: '#F58426',
+                        spurs: '#C4CED4',
+                        accent: '#EF4444',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'Noto Sans TC', 'sans-serif'],
+                        display: ['Outfit', 'Noto Sans TC', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nba-gradient {
+            background: radial-gradient(circle at top right, rgba(0, 122, 193, 0.15), transparent),
+                        radial-gradient(circle at bottom left, rgba(245, 132, 38, 0.1), transparent);
+        }
+        .bento-item {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bento-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="font-sans nba-gradient min-h-screen">
+
+    <!-- Header Section -->
+    <header class="relative pt-12 pb-6 px-6 text-center">
+        <div class="inline-block px-4 py-1 mb-4 rounded-full border border-thunder/50 bg-thunder/10 text-thunder font-bold tracking-widest text-xs uppercase">
+            Official 2026 Season Intelligence
+        </div>
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter gradient-text mb-4">
+            THE CHASE FOR <span class="text-white">GLORY</span>
+        </h1>
+        <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto font-light">
+            2026 NBA 季後賽深度戰力分析與冠軍預測報告
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-24">
+
+        <!-- Section 1: Infographic Top -->
+        <section id="infographic" class="space-y-8">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-8 w-1 bg-accent rounded-full"></div>
+                <h2 class="text-3xl font-bold italic tracking-tight">戰情快訊 INFOGRAPHIC</h2>
+            </div>
+
+            <!-- Visual Info-Card 3 -->
+            <div class="relative overflow-hidden rounded-3xl mb-12 shadow-2xl border border-white/5">
+                <img src='https://opal.google/board/blobs/ce7dd037-1c57-4e30-8862-d350a8fa0791' alt='NBA 2026 Info' class="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+            </div>
+
+            <!-- Bento Grid Summary -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bento-item glass-card p-6 md:col-span-2">
+                    <span class="text-thunder font-black text-xs tracking-widest">DOMINANCE</span>
+                    <h3 class="text-2xl font-bold mt-2">雷霆統治力</h3>
+                    <p class="text-slate-400 mt-2 leading-relaxed">奧克拉荷馬城雷霆以 <span class="text-white font-bold">8 勝 0 敗</span> 完美戰績挺進西區決賽，展現衛冕軍強大穩定性。</p>
+                </div>
+                <div class="bento-item glass-card p-6">
+                    <span class="text-knicks font-black text-xs tracking-widest">RISING POWER</span>
+                    <h3 class="text-2xl font-bold mt-2">東區新勢力</h3>
+                    <p class="text-slate-400 mt-2 text-sm">尼克橫掃晉級，在塞爾提克出局後成為奪冠大熱門。</p>
+                </div>
+                <div class="bento-item glass-card p-6">
+                    <span class="text-accent font-black text-xs tracking-widest">DARK HORSE</span>
+                    <h3 class="text-2xl font-bold mt-2">冷門變數</h3>
+                    <p class="text-slate-400 mt-2 text-sm">騎士領先龍頭活塞，可能成為最大黑馬。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Video Content -->
+        <section id="video-analysis" class="relative group">
+            <div class="absolute -inset-1 bg-gradient-to-r from-thunder via-knicks to-accent rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+            <div class="relative glass-card overflow-hidden">
+                <div class="p-8 border-b border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold">動態賽事解析</h2>
+                        <p class="text-slate-400">Visual Cinematic Breakdown & Atmosphere</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                         <div class="flex items-center bg-white/5 rounded-full px-4 py-2">
+                             <audio src='https://opal.google/board/blobs/869f6b2b-7c9e-45a6-8043-07202dba1207' controls class="h-8 w-48 brightness-90"></audio>
+                             <span class="text-[10px] ml-2 text-slate-500 uppercase tracking-tighter">BGM On</span>
+                         </div>
+                    </div>
+                </div>
+                <div class="aspect-video bg-black flex items-center justify-center">
+                    <video src='https://opal.google/board/blobs/ea89a4c6-8885-49cd-b1cb-adeb3c3cfef0' class="w-full h-full object-contain" controls autoplay muted loop></video>
+                </div>
+                <div class="p-6 text-center text-slate-500 text-sm italic">
+                    影片呈現雷霆與尼克色調之球員表現，及溫班亞馬的防守震撼力。
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Full Report -->
+        <section id="full-report" class="space-y-12 pb-20">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-bold uppercase tracking-widest">2026 NBA 冠軍預測報告</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-thunder to-knicks mx-auto rounded-full"></div>
+                <p class="text-slate-400 italic">截至 2026 年 5 月 14 日</p>
+            </div>
+
+            <!-- Analysis Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Main Content -->
+                <div class="lg:col-span-8 space-y-12">
+                    <!-- Part 1 -->
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-3">
+                            <span class="bg-white text-black font-bold px-2 py-1 text-sm rounded">01</span>
+                            <h3 class="text-2xl font-bold">目前季後賽形勢分析</h3>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="p-6 rounded-2xl bg-gradient-to-br from-thunder/10 to-transparent border border-thunder/20">
+                                <h4 class="text-thunder font-bold mb-3 flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path></svg>
+                                    西區聯盟 (WEST)
+                                </h4>
+                                <p class="text-slate-300 text-sm leading-relaxed">
+                                    <strong class="text-white">奧克拉荷馬城雷霆</strong> 4-0 橫掃洛杉磯湖人，至今未嚐敗仗。另一邊，<strong class="text-white">聖安東尼奧馬刺</strong> 以 3-2 領先灰狼，第六戰將決定能否會師西區決賽。
+                                </p>
+                            </div>
+                            <div class="p-6 rounded-2xl bg-gradient-to-br from-knicks/10 to-transparent border border-knicks/20">
+                                <h4 class="text-knicks font-bold mb-3 flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path></svg>
+                                    東區聯盟 (EAST)
+                                </h4>
+                                <p class="text-slate-300 text-sm leading-relaxed">
+                                    <strong class="text-white">紐約尼克</strong> 4-0 橫掃 76 人。第一種子活塞陷入苦戰，目前以 2-3 落後於<strong class="text-white">克里夫蘭騎士</strong>，米契爾極可能完成「下剋上」。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 3: Stars -->
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-3">
+                            <span class="bg-white text-black font-bold px-2 py-1 text-sm rounded">02</span>
+                            <h3 class="text-2xl font-bold">核心球員表現評析</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <!-- Player Bar -->
+                            <div class="glass-card p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-full bg-thunder/20 flex items-center justify-center font-black text-thunder">SGA</div>
+                                    <div>
+                                        <div class="font-bold">亞歷山大 (Shai Gilgeous-Alexander)</div>
+                                        <div class="text-xs text-slate-500">Oklahoma City Thunder</div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="text-center px-4 border-r border-white/10"><div class="text-xl font-bold">31</div><div class="text-[10px] uppercase text-slate-500">PPG</div></div>
+                                    <div class="text-center px-4"><div class="text-xl font-bold">6</div><div class="text-[10px] uppercase text-slate-500">APG</div></div>
+                                </div>
+                            </div>
+                            <div class="glass-card p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 border-l-4 border-l-spurs">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-full bg-spurs/20 flex items-center justify-center font-black text-spurs">VW</div>
+                                    <div>
+                                        <div class="font-bold">溫班亞馬 (Victor Wembanyama)</div>
+                                        <div class="text-xs text-slate-500">San Antonio Spurs</div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="text-center px-4 border-r border-white/10"><div class="text-xl font-bold">5.6</div><div class="text-[10px] uppercase text-slate-500">BPG</div></div>
+                                    <div class="text-center px-4"><div class="text-xl font-bold">10</div><div class="text-[10px] uppercase text-slate-500">RPG</div></div>
+                                </div>
+                            </div>
+                            <div class="glass-card p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 border-l-4 border-l-knicks">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-full bg-knicks/20 flex items-center justify-center font-black text-knicks">JB</div>
+                                    <div>
+                                        <div class="font-bold">布朗森 (Jalen Brunson)</div>
+                                        <div class="text-xs text-slate-500">New York Knicks</div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="text-center px-4"><div class="text-xl font-bold">28.2</div><div class="text-[10px] uppercase text-slate-500">PPG</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Odds -->
+                <div class="lg:col-span-4 space-y-8">
+                    <div class="glass-card p-8 sticky top-8">
+                        <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                            <span class="text-accent animate-pulse">●</span> 冠軍賠率分析
+                        </h3>
+                        <div class="space-y-6">
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm"><span class="font-bold text-thunder">OKC Thunder</span><span>-180</span></div>
+                                <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-thunder h-full w-[85%] rounded-full"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm"><span class="font-bold text-spurs">SA Spurs</span><span>+340</span></div>
+                                <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-spurs h-full w-[45%] rounded-full"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm"><span class="font-bold text-knicks">NY Knicks</span><span>+900</span></div>
+                                <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-knicks h-full w-[25%] rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8 pt-8 border-t border-white/5 text-xs text-slate-500 space-y-4">
+                            <p><strong>專家觀點：</strong> 多位體育分析師預測總決賽極有可能是「雷霆對決尼克」的防守大戰。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conclusion -->
+            <div class="p-10 rounded-[40px] bg-white text-slate-900 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-8 opacity-10">
+                    <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11H12.017V9C12.017 6.79086 13.8079 5 16.017 5H19.017C21.2261 5 23.017 6.79086 23.017 9V15C23.017 18.3137 20.3307 21 17.017 21H14.017ZM3.017 21L3.017 18C3.017 16.8954 3.91243 16 5.017 16H8.017C8.56928 16 9.017 15.5523 9.017 15V9C9.017 8.44772 8.56928 8 8.017 8H4.017C3.46472 8 3.017 8.44772 3.017 9V11H1.017V9C1.017 6.79086 2.80787 5 5.017 5H8.017C10.2261 5 12.017 6.79086 12.017 9V15C12.017 18.3137 9.33072 21 6.017 21H3.017Z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-black mb-4">簡要結論 (Brief Conclusion)</h3>
+                <p class="text-lg leading-relaxed font-light">
+                    2026 年 NBA 季後賽呈現出「一強多爭」的局面。奧克拉荷馬城雷霆憑藉 8-0 的季後賽戰績與衛冕軍經驗，依然是奪冠機率最高的球隊。然而，聖安東尼奧馬刺在溫班亞馬進化後的統治力，以及紐約尼克在東區展現的強悍韌性，都為最後的總冠軍歸屬增添了極大的不確定性。
+                </p>
+                <div class="mt-8 flex flex-wrap gap-2">
+                    <span class="text-[10px] font-bold border border-slate-200 px-3 py-1 rounded-full text-slate-500 uppercase tracking-widest">NBA Data Official</span>
+                    <span class="text-[10px] font-bold border border-slate-200 px-3 py-1 rounded-full text-slate-500 uppercase tracking-widest">CBS Sports Predictions</span>
+                    <span class="text-[10px] font-bold border border-slate-200 px-3 py-1 rounded-full text-slate-500 uppercase tracking-widest">The Athletic Scouting</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer as specified -->
+    <footer class="py-12 border-t border-white/5 text-center space-y-4">
+        <div class="text-lg text-slate-400">
+            【主題探索報告】by <span class="italic text-accent font-bold">NTUST</span> 林振國
+        </div>
+        <div class="text-sm tracking-[0.5em] text-slate-600 font-bold">
+            學號：M11309927
+        </div>
+    </footer>
+
+    <script>
+        // Simple Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
