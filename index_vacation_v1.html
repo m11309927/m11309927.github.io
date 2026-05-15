@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>策發科同仁休假登記系統</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Noto+Serif+TC:wght@300;400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    :root {
+      --cream: #fdf8f0;
+      --cream2: #f5ede0;
+      --gold: #b8860b;
+      --gold-light: #d4a843;
+      --gold-pale: #f0e0b0;
+      --ink: #2c1f0e;
+      --ink-soft: #5a4535;
+      --ink-mute: #8a7060;
+      --rose: #c0464a;
+      --sage: #4a7c59;
+      --sky: #2a6496;
+      --plum: #6a3d7a;
+      --amber: #c07020;
+      --teal: #2a7a7a;
+      --border: #d8c8a8;
+      --shadow: rgba(90,60,20,0.12);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--cream);
+      font-family: 'Noto Sans TC', sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    /* Subtle grain overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #2c1f0e 0%, #4a3020 50%, #3a2818 100%);
+      padding: 36px 40px 30px;
+      position: relative; overflow: hidden;
+    }
+    .header::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold-light), var(--gold), var(--gold-light), transparent);
+    }
+    .header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .header-title { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--gold-light); letter-spacing: 0.02em; line-height: 1.1; }
+    .header-sub { font-family: 'Noto Serif TC', serif; font-size: 0.85rem; color: #b09070; margin-top: 4px; letter-spacing: 0.08em; }
+    .header-badge {
+      background: rgba(180,130,50,0.15); border: 1px solid rgba(180,130,50,0.3);
+      border-radius: 8px; padding: 8px 16px; color: var(--gold-pale);
+      font-size: 0.78rem; font-family: 'Noto Serif TC', serif; letter-spacing: 0.06em;
+      text-align: center; line-height: 1.6;
+    }
+    .badge-count { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--gold-light); display: block; }
+
+    /* ── Main layout ── */
+    .main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; display: grid; grid-template-columns: 380px 1fr; gap: 28px; align-items: start; }
+    @media(max-width:820px){ .main { grid-template-columns: 1fr; } }
+
+    /* ── Card ── */
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px var(--shadow), 0 1px 0 rgba(255,255,255,0.9) inset;
+      overflow: hidden;
+    }
+    .card-header {
+      background: linear-gradient(135deg, var(--cream2), #ede0c8);
+      padding: 18px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .card-header-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--gold); display: flex; align-items: center; justify-content: center;
+    }
+    .card-header-icon svg { width: 16px; height: 16px; fill: white; }
+    .card-title { font-family: 'Noto Serif TC', serif; font-size: 1rem; font-weight: 700; color: var(--ink); }
+    .card-body { padding: 24px; }
+
+    /* ── Form ── */
+    .form-group { margin-bottom: 18px; }
+    .form-label { display: block; font-size: 0.78rem; font-weight: 500; color: var(--ink-soft); letter-spacing: 0.06em; margin-bottom: 7px; text-transform: uppercase; }
+    .form-input, .form-select {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      background: var(--cream); font-family: 'Noto Sans TC', sans-serif;
+      font-size: 0.92rem; color: var(--ink);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+    }
+    .form-input:focus, .form-select:focus {
+      outline: none; border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(184,134,11,0.12);
+    }
+    .form-select-wrap { position: relative; }
+    .form-select-wrap::after {
+      content: ''; position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      border: 5px solid transparent; border-top-color: var(--ink-mute);
+      pointer-events: none;
+    }
+    .btn-submit {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg, var(--gold), #9a6e08);
+      border: none; border-radius: 10px; cursor: pointer;
+      font-family: 'Noto Serif TC', serif; font-size: 1rem; font-weight: 700;
+      color: white; letter-spacing: 0.06em;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 3px 12px rgba(184,134,11,0.35);
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(184,134,11,0.45); }
+    .btn-submit:active { transform: translateY(0); }
+
+    /* Storage notice */
+    .storage-notice {
+      background: #f0f8e8; border: 1px solid #b8d898; border-radius: 10px;
+      padding: 12px 14px; margin-top: 16px;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .storage-notice svg { flex-shrink: 0; margin-top: 2px; }
+    .storage-notice p { font-size: 0.78rem; color: #4a6e2a; line-height: 1.5; }
+    .storage-notice strong { font-weight: 600; }
+
+    /* ── Right panel ── */
+    .panel-tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+    .tab-btn {
+      padding: 10px 22px; background: none; border: none; cursor: pointer;
+      font-family: 'Noto Serif TC', serif; font-size: 0.88rem; font-weight: 600;
+      color: var(--ink-mute); letter-spacing: 0.04em;
+      border-bottom: 2px solid transparent; margin-bottom: -2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .tab-btn:hover:not(.active) { color: var(--ink-soft); }
+    .panel-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+    .btn-action {
+      padding: 8px 16px; border-radius: 8px; font-family: 'Noto Sans TC', sans-serif;
+      font-size: 0.8rem; font-weight: 500; cursor: pointer; border: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-action:hover { transform: translateY(-1px); }
+    .btn-clear { background: #ffe8e8; color: var(--rose); }
+    .btn-clear:hover { box-shadow: 0 3px 8px rgba(192,70,74,0.2); }
+    .btn-export { background: #e8f4e8; color: var(--sage); }
+    .btn-export:hover { box-shadow: 0 3px 8px rgba(74,124,89,0.2); }
+    .btn-import { background: #e8eef8; color: var(--sky); }
+    .btn-import:hover { box-shadow: 0 3px 8px rgba(42,100,150,0.2); }
+
+    /* ── Filter bar ── */
+    .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+    .filter-input { flex: 1; min-width: 120px; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--cream); font-family: 'Noto Sans TC', sans-serif; font-size: 0.82rem; color: var(--ink); }
+    .filter-input:focus { outline: none; border-color: var(--gold); }
+    .filter-select { padding: 8px 28px 8px 10px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--cream); font-family: 'Noto Sans TC', sans-serif; font-size: 0.82rem; color: var(--ink); appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238a7060'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
+    .filter-select:focus { outline: none; border-color: var(--gold); }
+
+    /* ── List items ── */
+    .list-empty { text-align: center; padding: 48px 24px; }
+    .list-empty-icon { font-size: 3rem; margin-bottom: 12px; color: var(--border); }
+    .list-empty p { color: var(--ink-mute); font-size: 0.88rem; line-height: 1.7; }
+    .list-item {
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 14px 16px; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 14px;
+      background: #fff; position: relative; overflow: hidden;
+      animation: slideIn 0.3s ease;
+      transition: box-shadow 0.2s, transform 0.15s;
+    }
+    .list-item:hover { box-shadow: 0 4px 16px var(--shadow); transform: translateX(2px); }
+    @keyframes slideIn { from { opacity:0; transform: translateX(-12px); } to { opacity:1; transform: translateX(0); } }
+    .list-stripe { width: 4px; height: 44px; border-radius: 4px; flex-shrink: 0; }
+    .list-info { flex: 1; }
+    .list-name { font-family: 'Noto Serif TC', serif; font-size: 0.95rem; font-weight: 600; color: var(--ink); }
+    .list-date { font-size: 0.8rem; color: var(--ink-mute); margin-top: 2px; }
+    .list-tag {
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.04em;
+      font-family: 'Noto Serif TC', serif; white-space: nowrap;
+    }
+    .list-count { font-size: 0.7rem; color: var(--ink-mute); white-space: nowrap; }
+    .btn-delete {
+      width: 28px; height: 28px; border-radius: 8px; border: none;
+      background: #fff0f0; color: var(--rose); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; transition: background 0.15s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    .btn-delete:hover { background: #ffe0e0; transform: scale(1.1); }
+
+    /* ── Calendar ── */
+    .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .cal-month { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--ink); }
+    .btn-nav {
+      width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border);
+      background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--ink-soft); font-size: 1rem; transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-nav:hover { background: var(--cream2); border-color: var(--gold); color: var(--gold); }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cal-dow { text-align: center; font-size: 0.7rem; font-weight: 600; color: var(--ink-mute); padding: 6px 0; letter-spacing: 0.06em; }
+    .cal-dow:first-child, .cal-dow:last-child { color: var(--rose); }
+    .cal-cell {
+      min-height: 72px; border-radius: 10px; border: 1.5px solid transparent;
+      padding: 6px; transition: background 0.15s, border-color 0.15s;
+      background: var(--cream);
+    }
+    .cal-cell:hover { background: var(--cream2); }
+    .cal-cell.today { border-color: var(--gold); background: #fffbf0; }
+    .cal-cell.other-month { background: #f8f4ef; opacity: 0.5; }
+    .cal-cell.weekend { background: #fdf4f4; }
+    .cal-day { font-size: 0.8rem; font-weight: 600; color: var(--ink-soft); margin-bottom: 4px; }
+    .cal-cell.today .cal-day { color: var(--gold); }
+    .cal-cell.weekend .cal-day { color: var(--rose); opacity: 0.7; }
+    .cal-event { font-size: 0.65rem; border-radius: 4px; padding: 2px 5px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Noto Serif TC', serif; }
+    .cal-more { font-size: 0.62rem; color: var(--ink-mute); padding: 1px 4px; }
+
+    /* leave type colors */
+    .lt-annual    { background: #fff3e0; color: #b8560a; }
+    .lt-special   { background: #e8f5e9; color: #2e7d32; }
+    .lt-sick      { background: #fce4ec; color: #c62828; }
+    .lt-personal  { background: #ede7f6; color: #6a1b9a; }
+    .lt-comp      { background: #e3f2fd; color: #1565c0; }
+    .lt-bereave   { background: #e8eaf6; color: #283593; }
+    .stripe-annual  { background: #e8890a; }
+    .stripe-special { background: #43a047; }
+    .stripe-sick    { background: #e53935; }
+    .stripe-personal{ background: #8e24aa; }
+    .stripe-comp    { background: #1e88e5; }
+    .stripe-bereave { background: #3949ab; }
+
+    /* toast */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: #2c1f0e; color: var(--gold-pale); padding: 12px 24px; border-radius: 12px;
+      font-family: 'Noto Serif TC', serif; font-size: 0.88rem; letter-spacing: 0.04em;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 1000;
+      transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), opacity 0.35s;
+      opacity: 0;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--cream2); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold-pale); }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useCallback, useRef } = React;
+
+const STORAGE_KEY = 'leave_records_v1';
+
+const LEAVE_TYPES = [
+  { value: 'annual',   label: '年假',   cls: 'lt-annual',   stripe: 'stripe-annual',   cal: '#e8890a' },
+  { value: 'special',  label: '特休',   cls: 'lt-special',  stripe: 'stripe-special',  cal: '#43a047' },
+  { value: 'sick',     label: '病假',   cls: 'lt-sick',     stripe: 'stripe-sick',     cal: '#e53935' },
+  { value: 'personal', label: '事假',   cls: 'lt-personal', stripe: 'stripe-personal', cal: '#8e24aa' },
+  { value: 'comp',     label: '補休',   cls: 'lt-comp',     stripe: 'stripe-comp',     cal: '#1e88e5' },
+  { value: 'bereave',  label: '喪假',   cls: 'lt-bereave',  stripe: 'stripe-bereave',  cal: '#3949ab' },
+];
+const typeMap = Object.fromEntries(LEAVE_TYPES.map(t => [t.value, t]));
+
+const getDayCount = (start, end) => {
+  const s = new Date(start), e = new Date(end);
+  return Math.floor((e - s) / 86400000) + 1;
+};
+
+const formatDate = d => {
+  if (!d) return '';
+  const dt = new Date(d + 'T00:00:00');
+  return `${dt.getFullYear()}/${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getDate()).padStart(2,'0')}`;
+};
+
+// ── LocalStorage helpers ──────────────────────────────────────────
+const loadRecords = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw);
+  } catch { return []; }
+};
+const saveRecords = (records) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+  } catch(e) {
+    console.warn('localStorage save failed:', e);
+  }
+};
+
+// ── Toast ─────────────────────────────────────────────────────────
+function Toast({ msg, visible }) {
+  return <div className={`toast ${visible ? 'show' : ''}`}>{msg}</div>;
+}
+
+// ── Form ──────────────────────────────────────────────────────────
+function LeaveForm({ onAdd }) {
+  const today = new Date().toISOString().slice(0, 10);
+  const [name, setName] = useState('');
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(today);
+  const [type, setType] = useState('annual');
+  const [note, setNote] = useState('');
+  const [err, setErr] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!name.trim()) { setErr('請填寫姓名'); return; }
+    if (!startDate)    { setErr('請選擇開始日期'); return; }
+    if (!endDate)      { setErr('請選擇結束日期'); return; }
+    if (endDate < startDate) { setErr('結束日期不能早於開始日期'); return; }
+    setErr('');
+    const record = {
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+      name: name.trim(), startDate, endDate, type,
+      note: note.trim(),
+      createdAt: new Date().toISOString(),
+    };
+    onAdd(record);
+    setName(''); setStartDate(today); setEndDate(today); setType('annual'); setNote('');
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="form-group">
+        <label className="form-label">姓名</label>
+        <input className="form-input" placeholder="請輸入姓名" value={name} onChange={e => setName(e.target.value)} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">開始日期</label>
+        <input type="date" className="form-input" value={startDate} onChange={e => { setStartDate(e.target.value); if(e.target.value > endDate) setEndDate(e.target.value); }} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">結束日期</label>
+        <input type="date" className="form-input" value={endDate} min={startDate} onChange={e => setEndDate(e.target.value)} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">假別</label>
+        <div className="form-select-wrap">
+          <select className="form-select" value={type} onChange={e => setType(e.target.value)}>
+            {LEAVE_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+          </select>
+        </div>
+      </div>
+      <div className="form-group">
+        <label className="form-label">備註（選填）</label>
+        <input className="form-input" placeholder="補充說明..." value={note} onChange={e => setNote(e.target.value)} />
+      </div>
+      {err && <p style={{color:'var(--rose)',fontSize:'0.8rem',marginBottom:'12px',fontFamily:"'Noto Serif TC',serif"}}>{err}</p>}
+      <button type="submit" className="btn-submit">策發科登記休假</button>
+
+      <div className="storage-notice">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="1" y="3" width="14" height="11" rx="2" stroke="#4a6e2a" strokeWidth="1.5"/>
+          <path d="M5 3V2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="#4a6e2a" strokeWidth="1.5"/>
+          <path d="M8 8v3M8 7v.5" stroke="#4a6e2a" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+        <p><strong>資料已自動儲存</strong>至瀏覽器本機，重新整理或關閉頁面後仍可保留。</p>
+      </div>
+    </form>
+  );
+}
+
+// ── List View ─────────────────────────────────────────────────────
+function ListView({ records, onDelete }) {
+  const [search, setSearch] = useState('');
+  const [filterType, setFilterType] = useState('all');
+
+  const filtered = records
+    .filter(r => filterType === 'all' || r.type === filterType)
+    .filter(r => !search || r.name.includes(search))
+    .sort((a, b) => a.startDate.localeCompare(b.startDate));
+
+  return (
+    <div>
+      <div className="filter-bar">
+        <input className="filter-input" placeholder="搜尋姓名..." value={search} onChange={e => setSearch(e.target.value)} />
+        <select className="filter-select" value={filterType} onChange={e => setFilterType(e.target.value)}>
+          <option value="all">全部假別</option>
+          {LEAVE_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+        </select>
+      </div>
+      {filtered.length === 0 ? (
+        <div className="list-empty">
+          <div className="list-empty-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <rect x="8" y="10" width="32" height="34" rx="4" stroke="#d8c8a8" strokeWidth="2"/>
+              <path d="M16 10V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3" stroke="#d8c8a8" strokeWidth="2"/>
+              <path d="M16 22h16M16 29h10" stroke="#d8c8a8" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </div>
+          <p>尚無符合條件的紀錄<br/>快來登記第一筆休假吧！</p>
+        </div>
+      ) : filtered.map(r => {
+        const t = typeMap[r.type] || LEAVE_TYPES[0];
+        const days = getDayCount(r.startDate, r.endDate);
+        return (
+          <div key={r.id} className="list-item">
+            <div className={`list-stripe ${t.stripe}`}></div>
+            <div className="list-info">
+              <div className="list-name">{r.name}</div>
+              <div className="list-date">
+                {formatDate(r.startDate)}{r.startDate !== r.endDate ? ` — ${formatDate(r.endDate)}` : ''}
+                {r.note ? `　${r.note}` : ''}
+              </div>
+            </div>
+            <span className={`list-tag ${t.cls}`}>{t.label}</span>
+            <span className="list-count">{days} 天</span>
+            <button className="btn-delete" onClick={() => onDelete(r.id)} title="刪除">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                <path d="M1.5 1.5l9 9M10.5 1.5l-9 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Calendar View ─────────────────────────────────────────────────
+function CalendarView({ records }) {
+  const now = new Date();
+  const [year, setYear] = useState(now.getFullYear());
+  const [month, setMonth] = useState(now.getMonth());
+
+  const prevMonth = () => { if(month === 0){ setYear(y=>y-1); setMonth(11); } else setMonth(m=>m-1); };
+  const nextMonth = () => { if(month === 11){ setYear(y=>y+1); setMonth(0); } else setMonth(m=>m+1); };
+
+  const firstDay = new Date(year, month, 1);
+  const lastDay  = new Date(year, month+1, 0);
+  const startPad = firstDay.getDay();
+  const totalCells = Math.ceil((startPad + lastDay.getDate()) / 7) * 7;
+
+  const todayStr = now.toISOString().slice(0,10);
+
+  // Build date -> records map
+  const dayMap = {};
+  records.forEach(r => {
+    const s = new Date(r.startDate + 'T00:00:00');
+    const e = new Date(r.endDate   + 'T00:00:00');
+    for(let d = new Date(s); d <= e; d.setDate(d.getDate()+1)) {
+      const key = d.toISOString().slice(0,10);
+      if(!dayMap[key]) dayMap[key] = [];
+      dayMap[key].push(r);
+    }
+  });
+
+  const MONTH_NAMES = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+  const DOW = ['日','一','二','三','四','五','六'];
+
+  const cells = Array.from({length: totalCells}, (_, i) => {
+    const dayNum = i - startPad + 1;
+    if(dayNum < 1 || dayNum > lastDay.getDate()) return { empty: true, dayNum };
+    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(dayNum).padStart(2,'0')}`;
+    const dow = (startPad + dayNum - 1) % 7;
+    return { dayNum, dateStr, dow, isToday: dateStr === todayStr, isWeekend: dow===0||dow===6 };
+  });
+
+  return (
+    <div>
+      <div className="cal-nav">
+        <button className="btn-nav" onClick={prevMonth}>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M7 1L3 5l4 4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/></svg>
+        </button>
+        <div className="cal-month">{year} 年 {MONTH_NAMES[month]}</div>
+        <button className="btn-nav" onClick={nextMonth}>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M3 1l4 4-4 4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/></svg>
+        </button>
+      </div>
+      <div className="cal-grid">
+        {DOW.map(d => <div key={d} className="cal-dow">{d}</div>)}
+        {cells.map((cell, i) => {
+          if(cell.empty) return <div key={i} className={`cal-cell other-month`}></div>;
+          const dayRecords = dayMap[cell.dateStr] || [];
+          const shown = dayRecords.slice(0, 2);
+          const extra = dayRecords.length - 2;
+          return (
+            <div key={cell.dateStr} className={`cal-cell ${cell.isToday?'today':''} ${cell.isWeekend?'weekend':''}`}>
+              <div className="cal-day">{cell.dayNum}</div>
+              {shown.map(r => {
+                const t = typeMap[r.type] || LEAVE_TYPES[0];
+                return (
+                  <div key={r.id} className="cal-event" style={{background: t.cal+'22', color: t.cal, borderLeft:`2px solid ${t.cal}`}}>
+                    {r.name}
+                  </div>
+                );
+              })}
+              {extra > 0 && <div className="cal-more">+{extra} 人</div>}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Main App ──────────────────────────────────────────────────────
+function App() {
+  const [records, setRecords] = useState(() => loadRecords());
+  const [tab, setTab] = useState('list');
+  const [toast, setToast] = useState({ msg: '', visible: false });
+  const toastTimer = useRef(null);
+  const fileInputRef = useRef(null);
+
+  // Auto-save whenever records change
+  useEffect(() => {
+    saveRecords(records);
+  }, [records]);
+
+  const showToast = (msg) => {
+    if(toastTimer.current) clearTimeout(toastTimer.current);
+    setToast({ msg, visible: true });
+    toastTimer.current = setTimeout(() => setToast(t => ({...t, visible: false})), 2800);
+  };
+
+  const handleAdd = useCallback((record) => {
+    setRecords(prev => [...prev, record]);
+    showToast(`已成功登記 ${record.name} 的${typeMap[record.type]?.label}，資料已儲存。`);
+  }, []);
+
+  const handleDelete = useCallback((id) => {
+    setRecords(prev => prev.filter(r => r.id !== id));
+    showToast('已刪除該筆紀錄。');
+  }, []);
+
+  const handleClear = () => {
+    if(!window.confirm('確定要清除所有資料嗎？此操作無法復原。')) return;
+    setRecords([]);
+    showToast('已清除所有紀錄。');
+  };
+
+  // Export CSV
+  const handleExport = () => {
+    if(records.length === 0) { showToast('目前沒有資料可匯出。'); return; }
+    const header = ['姓名','開始日期','結束日期','天數','假別','備註','登記時間'];
+    const rows = records.map(r => [
+      r.name, r.startDate, r.endDate, getDayCount(r.startDate, r.endDate),
+      typeMap[r.type]?.label || r.type, r.note || '',
+      new Date(r.createdAt).toLocaleString('zh-TW'),
+    ]);
+    const csv = [header, ...rows].map(row => row.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const bom = '\uFEFF';
+    const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `休假紀錄_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click(); URL.revokeObjectURL(url);
+    showToast(`已匯出 ${records.length} 筆資料為 CSV。`);
+  };
+
+  // Import JSON backup
+  const handleImport = (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if(!Array.isArray(data)) throw new Error('格式錯誤');
+        setRecords(data);
+        showToast(`已匯入 ${data.length} 筆資料。`);
+      } catch { showToast('匯入失敗：檔案格式不正確。'); }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
+  // Export JSON backup
+  const handleBackup = () => {
+    const blob = new Blob([JSON.stringify(records, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `休假備份_${new Date().toISOString().slice(0,10)}.json`;
+    a.click(); URL.revokeObjectURL(url);
+    showToast('已下載 JSON 備份檔案。');
+  };
+
+  const totalDays = records.reduce((s, r) => s + getDayCount(r.startDate, r.endDate), 0);
+
+  return (
+    <div>
+      {/* Header */}
+      <div className="header">
+        <div className="header-inner">
+          <div>
+            <div className="header-title">同仁休假登記系統</div>
+            <div className="header-sub">Leave Registration &amp; Calendar</div>
+          </div>
+          <div className="header-badge">
+            <span className="badge-count">{records.length}</span>
+            筆紀錄 / 共 {totalDays} 天
+          </div>
+        </div>
+      </div>
+
+      {/* Main */}
+      <div className="main">
+        {/* Left: Form */}
+        <div>
+          <div className="card">
+            <div className="card-header">
+              <div className="card-header-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+              </div>
+              <div className="card-title">新增休假申請</div>
+            </div>
+            <div className="card-body">
+              <LeaveForm onAdd={handleAdd} />
+            </div>
+          </div>
+        </div>
+
+        {/* Right: List / Calendar */}
+        <div>
+          <div className="card">
+            <div className="card-body">
+              <div className="panel-tabs">
+                <button className={`tab-btn ${tab==='list'?'active':''}`} onClick={()=>setTab('list')}>清單檢視</button>
+                <button className={`tab-btn ${tab==='cal'?'active':''}`} onClick={()=>setTab('cal')}>月曆檢視</button>
+              </div>
+
+              <div className="panel-actions">
+                <button className="btn-action btn-export" onClick={handleExport}>匯出 CSV</button>
+                <button className="btn-action btn-import" style={{background:'#f0eafa',color:'#6a1b9a'}} onClick={handleBackup}>備份 JSON</button>
+                <button className="btn-action btn-import" onClick={()=>fileInputRef.current?.click()}>還原備份</button>
+                <button className="btn-action btn-clear" onClick={handleClear}>清除全部</button>
+                <input ref={fileInputRef} type="file" accept=".json" style={{display:'none'}} onChange={handleImport}/>
+              </div>
+
+              {tab === 'list'
+                ? <ListView records={records} onDelete={handleDelete}/>
+                : <CalendarView records={records}/>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Toast msg={toast.msg} visible={toast.visible}/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
